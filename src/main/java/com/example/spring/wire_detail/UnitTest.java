@@ -10,6 +10,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class UnitTest {
     @Test
     public void test() {
+
+        //github
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
         Person person = (Person) context.getBean("person");
         System.out.println(person);
