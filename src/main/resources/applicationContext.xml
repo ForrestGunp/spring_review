@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="hello" class="com.example.spring.beans.HelloWorld">
+        <property name="name" value="spring"/>
+    </bean>
+
+    <!--构造器注入方式index与type属性值来防止注入时的歧义-->
+    <!-- <bean id="car" class="com.example.spring.beans.Car">
+         <constructor-arg value="volvo" type="java.lang.String"/>
+         <constructor-arg value="black" type="java.lang.String"></constructor-arg>
+         <constructor-arg value="200000" type="double"></constructor-arg>   &lt;!&ndash;与有price的构造器匹配,而且直接将200000转换成double&ndash;&gt;
+
+     </bean>-->
+
+    <bean id="car1" class="com.example.spring.beans.Car">
+        <constructor-arg value="Benz" type="java.lang.String"/>
+        <constructor-arg value="grey" type="java.lang.String"/>
+        <constructor-arg value="260" type="int"/>  <!--与有maxSpeed的构造器匹配-->
+    </bean>
+
+
+    <!--属性配置细节-->
+
+    <bean id="car2" class="com.example.spring.wire_detail.Car">
+        <property name="brand" value="Baoma"/>
+        <property name="type">
+            <value><![CDATA[<SUV>]]></value> <!--以这种形式赋值特殊字符必须使用value节点-->
+        </property>
+        <property name="maxSpeed" value="200"/>
+        <property name="price" value="500000"/>
+    </bean>
+    <bean id="person" class="com.example.spring.wire_detail.Person">
+        <property name="name" value="Ron"/>
+        <property name="age" value="19"/>
+        <property name="car" ref="car2"/> <!--ref引用其他bean-->
+    </bean>
+
+    <bean id="person2" class="com.example.spring.wire_detail.Person">
+        <property name="name" value="Harry">  <!--value属性或者value节点-->
+            <!--<value>  </value>-->
+        </property>
+        <property name="age" value="20"/>
+        <property name="car">
+            <bean class="com.example.spring.wire_detail.Car">  <!--内部bean不用写id，就算写了也无法被其他bean所引用-->
+                <property name="brand" value="Ford"/>
+                <property name="type" value="CRV"/>
+                <property name="maxSpeed" value="150"/>
+                <property name="price" value="80000"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean id="person3" class="com.example.spring.wire_detail.Person">
+        <property name="name" value="Malfy"/>
+        <property name="age" value="19"/>
+        <property name="car">
+            <null/>    <!--为Malfy的car属性设置为空-->
+        </property>
+    </bean>
+
+    <bean id="car" class="com.example.spring.wire_detail.Car">
+        <property name="brand" value="Ferrari"/>
+        <property name="type" value="SUV"/>
+        <property name="maxSpeed" value="300"/>
+        <property name="price" value="2000000"/>
+    </bean>
+
+    <!--<bean id="person4" class="com.example.spring.wire_detail.Person">-->
+        <!--<property name="name" value="Doss"/>-->
+        <!--<property name="age" value="29"/>-->
+        <!--<property name="car" value="Porsche"/>-->
+    <!--</bean>-->
+
+    <bean id="address" class="com.example.spring.wire_detail.Address">
+        <property name="city" value="beijing"/>
+        <property name="street" value="fuxinglu"/>
+
+    </bean>
+
+    <!--测试集合类 List Map Set-->
+    <bean id="person4"  class="com.example.spring.wire_detail.Person2">
+        <property name="name" value="Tom"/>
+        <property name="age" value="11"/>
+        <property name="cars" >
+            <list>
+                <ref bean="car"/>
+                <ref bean="car2"/>
+            </list>
+        </property>
+        <property name="params">
+            <map>
+                <entry key="an entry" value="just some string "/>
+                <entry key="a ref" value-ref="car"/>
+            </map>
+        </property>
+
+        <property name="attrs">
+             <set>
+                 <value>just some string</value>
+                 <ref bean="address"/>
+             </set>
+        </property>
+    </bean>
+
+
+</beans>
