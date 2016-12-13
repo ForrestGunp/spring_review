@@ -38,5 +38,7 @@ public class UnitTest {
         dataSource = (DataSource) context.getBean("dataSource2");
         System.out.println(dataSource.getProperties().get("url"));
 
+
+
     }
 }

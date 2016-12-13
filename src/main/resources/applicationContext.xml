@@ -2,6 +2,7 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
                               http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util-4.0.xsd">
     <bean id="hello" class="com.example.spring.beans.HelloWorld">
@@ -152,5 +153,9 @@
     <bean id="dataSource2" class="com.example.spring.wire_detail.DataSource">
         <property name="properties" ref="properties"/>
     </bean>
+
+    <!--使用p:属性可以简化初始bean的写法-->
+    <bean id="car3" class="com.example.spring.wire_detail.Car" p:brand="Audi" p:maxSpeed="200" p:type="CRT" p:price="200000"/>
+    <bean id="person6" class="com.example.spring.wire_detail.Person" p:name="White" p:age="20" p:car-ref="car3"/>
 
 </beans>
