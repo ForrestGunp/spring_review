@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-autowire-candidates="dao2">
+
+   <bean id="dao" class="com.example.spring.autowire.Dao"  >
+       <property name="dataSource" value="C3P0"/>
+   </bean>
+
+    <!--autowire-candidate属性将m=某个bean排除在自动装配范围外, 所以下面的service byType装配并不会报错
+    (还可以采用beans节点的 default-autowire-candidates属性，来限制自动装配的bean，如上面属性，我写的 default-autowire-candidates="dao2"
+      bean id=dao就排除在自动注入范围之内)，
+
+
+   -->
+    <bean id="dao2" class="com.example.spring.autowire.Dao" >
+        <property name="dataSource" value="dbcp"/>
+    </bean>
+
+    <!--自动装配：只声明bean,而把bean之间的关系交给IOC容器来完成-->
+    <!--
+       byType 根据类型进行自动装配，但要求IOC容器只有一个类型对应的bean，若有多个则无法完成自动装配。
+       byName 若属性名和某一个bean的id名一致，既可以完成自动装配，若没有则无法完成自动装配。
+
+    -->
+    <bean id="service" class="com.example.spring.autowire.Service" autowire="byType"/>
+    <bean id="action" class="com.example.spring.autowire.Action" autowire="byName"/>
+
+
+      <!--对象依赖,继承-->
+    <bean id="dataSource" class="com.example.spring.autowire.DataSource">
+        <property name="properties">
+            <props>
+                <prop key="user">root</prop>
+                <prop key="password">root</prop>
+                <prop key="type">mysql</prop>
+                <prop key="url">jdbc:mysql:///test</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="dataSource2" parent="dataSource">
+
+    </bean>
+
+    <bean id="dao3" class="com.example.spring.autowire.Dao2" depends-on="dataSource">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--abstract属性设置为true 为bean模板，同java abstract类一样不能新建，只能被继承实现-->
+    <bean id="company" class="com.example.spring.autowire.Company" abstract="true">
+        <property name="city" value="Beijing"/>
+
+    </bean>
+
+    <bean id="company2" class="com.example.spring.autowire.Company" parent="company">
+        <property name="name" value="wanfangData"/>
+        <property name="scale" value="500"/>
+        <property name="street" value="fuxinglu"/>
+    </bean>
+
+</beans>
