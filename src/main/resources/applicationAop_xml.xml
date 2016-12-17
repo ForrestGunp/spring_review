@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+    <bean id="arithmeticCaculator" class="com.example.spring.aop.by_xml.ArithmeticCaculatorImp"/>
+
+    <bean id="loggingAspect" class="com.example.spring.aop.by_xml.LoggingAspect"/>
+
+    <bean id="validateAspect" class="com.example.spring.aop.by_xml.ValidateAspect"/>
+
+    <aop:config>
+        <aop:pointcut id="point"
+                      expression="execution(public int com.example.spring.aop.by_xml.ArithmeticCaculatorImp.*(int ,int ))"/>
+        <aop:aspect ref="loggingAspect" order="2">
+            <aop:before method="beforeMethhod" pointcut-ref="point"/>
+            <aop:after method="afterMethod" pointcut-ref="point"/>
+            <!--returning属性中的值与方法中的入参必须保持一致-->
+            <aop:after-returning method="afterReturning" pointcut-ref="point" returning="object"/>
+            <!--throwing属性中的值与方法中的入参必须保持一致-->
+            <aop:after-throwing method="afterThrowing" pointcut-ref="point" throwing="ex"/>
+            <!--<aop:around method="aroundMethod" pointcut-ref="point"/>-->
+        </aop:aspect>
+
+        <aop:aspect ref="validateAspect" order="1">
+            <aop:before method="beforeMethod" pointcut-ref="point"/>
+        </aop:aspect>
+    </aop:config>
+</beans>
